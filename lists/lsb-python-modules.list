@@ -1,8 +1,22 @@
-_ast 
+# in 2.5, not in 2.4
+#_ast 
+#_types
+#_ctypes
+#_curses
+#_elementtree
+#_functools
+#_hashlib
+#_lsprof
+#spwd
+#_struct
+# in 2.4, not in 2.5
+#dl
+#imageop
+#rgbimg
+# common to 2.4, 2.5
 codecs
 _sre
 _symtable
-_types
 errno
 exceptions
 gc
@@ -30,22 +44,14 @@ cPickle
 crypt
 cStringIO
 _csv
-_ctypes
-_curses
 datetime
-dl
-_elementtree
 fcntl
-_functools
 grp
-_hashlib
 _heapq
 _hotshot
-imageop
 itertools
 linuxaudiodev
 _locale
-_lsprof
 mmap
 _multibytecodec
 operator
@@ -54,12 +60,9 @@ parser
 pyexpat
 _random
 resource
-rbgimg
 select
 socket
-spwd
 strop
-_struct
 syslog
 termios
 time

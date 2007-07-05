@@ -34,7 +34,13 @@ def check_modules(journal, modules, lsb_modules, syspath_org):
             if key != '__main__' and key != '__builtin__':
                 # warn if we're getting modules from outside sys.path
                 m = modules[key]
-                mdir = os.path.dirname(m.__file__)
+                #print m
+                if m.__file__:    
+                    #print 'file:' + m.__file__
+                    mdir = os.path.dirname(m.__file__)
+                else:
+                    # no __file__ attribute - just give it one to move on
+                    mdir = syspath_org[0]
                 if mdir not in syspath_org:
                     tresult = key + twarn + mdir
                     jresult = 'UNRESOLVED'
@@ -42,7 +48,6 @@ def check_modules(journal, modules, lsb_modules, syspath_org):
                     tresult = key + tfail
                     jresult = 'FAIL'
                 print tresult
-                # print m.__file__
                 if journal:                
                     tet.info(tcount, tresult)
         if journal:
@@ -93,11 +98,13 @@ def main(argv):
     line = modfile.readline()
     line = line.rstrip()
     while line:
-        lsb_modules.append(line)
+        if line[0] != '#':
+            lsb_modules.append(line)
         line = modfile.readline()
         line = line.rstrip()
     modfile.close()
-    
+    #print lsb_modules
+
     mf = lsbmf(path,debug,exclude)
 
     # see if target is really a python script and run it
