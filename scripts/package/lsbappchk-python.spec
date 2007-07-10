@@ -62,6 +62,10 @@ fi
 
 #==================================================
 %changelog
+* Tue Jul 10 2007 Stew Benedict <stewb@linux-foundation.org>
+- _foo -> foo, add os, re, string
+- bump to release 2
+
 * Tue Jun 03 2007 Stew Benedict <stewb@linux-foundation.org>
 - initial packaging
 
