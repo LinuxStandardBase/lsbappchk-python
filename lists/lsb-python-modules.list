@@ -15,8 +15,10 @@
 #rgbimg
 # common to 2.4, 2.5
 codecs
-sre
-symtable
+# deperecated for re
+#sre
+# not found in http://docs.python.org/modindex.html
+#symtable
 errno
 exceptions
 gc
@@ -33,12 +35,13 @@ audioop
 binascii
 bisect
 cmath
-codecs_cn
-codecs_hk
-codecs_iso2022
-codecs_jp
-codecs_kr
-codecs_tw
+# internal, only importable with the underscore
+#codecs_cn
+#codecs_hk
+#codecs_iso2022
+#codecs_jp
+#codecs_kr
+#codecs_tw
 collections
 cPickle
 crypt
@@ -50,22 +53,26 @@ grp
 heapq
 hotshot
 itertools
-linuxaudiodev
+# deprecated for ossaudiodev
+#linuxaudiodev
 locale
 mmap
-multibytecodec
+# internal, only importable with the underscore
+#multibytecodec
 operator
 os
 ossaudiodev
 parser
-pyexpat
+# not found in http://docs.python.org/modindex.html
+#pyexpat
 random
 re
 resource
 select
 socket
 string
-strop
+# not found in http://docs.python.org/modindex.html
+#strop
 syslog
 termios
 time
