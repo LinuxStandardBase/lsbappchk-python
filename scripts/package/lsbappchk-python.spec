@@ -12,7 +12,7 @@ URL: http://www.linuxbase.org/test
 BuildRoot: %{_tmppath}/%{name}-root
 AutoReqProv: no
 BuildArch: noarch
-Requires: lsb-tet3-lite
+Requires: lsb-tet3-lite lsb-python
 
 %description
 This is the official package version of the LSB Python Application Test.

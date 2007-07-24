@@ -1,8 +1,8 @@
 # XXX We should play the usual tricks defining stuff here and building
 # XXX a specfile from this info, but not yet: for now keep in sync
 PACKAGE=lsbappchk-python
-VERSION=0.1
-RELEASE=3
+VERSION=0.2
+RELEASE=1
 
 #
 # Derive date string for daily snapshots

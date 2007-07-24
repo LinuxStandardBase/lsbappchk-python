@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/opt/lsb/appbat/bin/python
 # prototype application to check python applications
 # for LSB compliance
 # derived from ideas at http://www.tarind.com/depgraph.html
