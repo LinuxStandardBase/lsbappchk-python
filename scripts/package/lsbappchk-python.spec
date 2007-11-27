@@ -7,6 +7,7 @@ Release: %{rel}
 License: GPL
 Group: Development/Tools
 Source: %{name}-%{version}.tar.gz
+Source1: tetj.py
 URL: http://www.linuxbase.org/test
 #Prefix: %{_prefix}
 BuildRoot: %{_tmppath}/%{name}-root
@@ -35,7 +36,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{basedir}/bin
 mkdir -p ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 mkdir -p ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 cp -p source/lsbappchk.py ${RPM_BUILD_ROOT}%{basedir}/bin
-cp -p source/tet.py ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
+cp -p %{SOURCE1} ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 cp -p lists/lsb-python-modules.list ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 
 # VERSION file for the journal
@@ -62,6 +63,10 @@ fi
 
 #==================================================
 %changelog
+* Tue Nov 27 2007 Stew Benedict <stewb@linux-foundation.org>
+- fix journal issues (bug 1782)
+- use tetj.py from misc-test
+
 * Tue Jul 10 2007 Stew Benedict <stewb@linux-foundation.org>
 - _foo -> foo, add os, re, string
 - bump to release 2

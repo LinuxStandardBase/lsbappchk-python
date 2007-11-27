@@ -15,6 +15,7 @@ RPM_BINARY_NAME=$(FULL_PACKAGE_NAME)-$(RELEASE).$(RPM_BUILD_ARCH).rpm
 RPM_SOURCE_NAME=$(FULL_PACKAGE_NAME)-$(RELEASE).src.rpm
 
 SOURCE1 = $(PACKAGE)-$(VERSION).tar.gz
+TETJ = tetj.py
 
 # Temporary build directory
 TMP_BUILD_DIR=/tmp/$(FULL_PACKAGE_NAME)
@@ -53,6 +54,7 @@ RPM_SRPM_DIR=$(RPM_TMP_BUILD_DIR)/SRPMS
 # Override this on the command line to use a different repo
 BZRTREES?=http://bzr.freestandards.org/lsb/devel
 BZR_MODULE=$(PACKAGE)
+TETJ_MODULE=misc-test
 
 # Default target
 ifndef BUILD_NO_DEB
@@ -62,9 +64,9 @@ all: rpm_package
 endif
 
 clean:
-	@rm -f *.rpm *.deb *.tar.gz perldeps.pl
+	@rm -f *.rpm *.deb *.tar.gz tetj.py
 
-tarball: $(SOURCE1)
+tarball: $(SOURCE1) $(TETJ)
 
 deb_package: rpm_package
 	@fakeroot alien -cdk $(RPM_BINARY_NAME)
@@ -77,7 +79,7 @@ ifndef BUILD_NO_DEB
 	@ls *.deb
 endif
 
-$(RPM_BINARY_NAME) $(RPM_SOURCE_NAME): $(PACKAGE).spec $(SOURCE1) $(SOURCE2) 
+$(RPM_BINARY_NAME) $(RPM_SOURCE_NAME): $(PACKAGE).spec $(SOURCE1) $(TETJ) 
 	@mkdir -p $(RPM_TMP_BUILD_DIR)/BUILD
 	@mkdir -p $(RPM_TMP_BUILD_DIR)/RPMS
 	@mkdir -p $(RPM_TMP_BUILD_DIR)/SRPMS
@@ -92,5 +94,8 @@ endif
 
 $(SOURCE1):
 	bzr export $(SOURCE1) $(BZRTREES)/$(BZR_MODULE)
+
+$(TETJ):
+	bzr cat $(BZRTREES)/$(TETJ_MODULE)/tetj/tetj.py > tetj.py
 
 .PHONY : tarball rpm_package
