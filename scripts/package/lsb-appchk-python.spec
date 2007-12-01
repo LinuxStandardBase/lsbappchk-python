@@ -1,7 +1,7 @@
 %define basedir /opt/lsb
 # %{version}, %{rel} are provided by the Makefile
 Summary: LSB Python Application Checker
-Name: lsbappchk-python
+Name: lsb-appchk-python
 Version: %{version}
 Release: %{rel}
 License: GPL
@@ -63,6 +63,9 @@ fi
 
 #==================================================
 %changelog
+* Sat Dec  1 2007 Mats Wichmann <mats@linux-foundation.org>
+- renamed package to lsb-appchk-python from lsbappchk-python (convention)
+
 * Tue Nov 27 2007 Stew Benedict <stewb@linux-foundation.org>
 - fix journal issues (bug 1782)
 - use tetj.py from misc-test
