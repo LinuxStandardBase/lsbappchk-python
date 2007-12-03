@@ -2,7 +2,7 @@
 # prototype application to check python applications
 # for LSB compliance
 # derived from ideas at http://www.tarind.com/depgraph.html
-# Copyright GPL, Stew Benedict <stewb@linux-foundation.org>
+# Artistic license, Stew Benedict <stewb@linux-foundation.org>
 
 import sys
 import os

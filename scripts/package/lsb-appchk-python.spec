@@ -4,7 +4,7 @@ Summary: LSB Python Application Checker
 Name: lsb-appchk-python
 Version: %{version}
 Release: %{rel}
-License: GPL
+License: Artistic 
 Group: Development/Tools
 Source: %{name}-%{version}.tar.gz
 Source1: tetj.py
@@ -45,6 +45,10 @@ cat > VERSION.lsbappchk.py << EOF
 EOF
 cp VERSION.lsbappchk.py ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 
+# license file
+install -d ${RPM_BUILD_ROOT}%{basedir}/share/doc/%{name}
+cp source/Artistic ${RPM_BUILD_ROOT}%{basedir}/share/doc/%{name}
+
 #==================================================
 %clean
 if [ -z "${RPM_BUILD_ROOT}"  -a "${RPM_BUILD_ROOT}" != "/" ]; then 
@@ -60,9 +64,14 @@ fi
 /opt/lsb/lib/appchk/*
 %dir /opt/lsb/share/appchk
 /opt/lsb/share/appchk/*
+%dir /opt/lsb/share/doc/%{name}
+/opt/lsb/share/doc/%{name}/*
 
 #==================================================
 %changelog
+* Mon Dec 03 2007 Stew Benedict <stewb@linux-foundation.org>
+- Add license file
+
 * Sat Dec  1 2007 Mats Wichmann <mats@linux-foundation.org>
 - renamed package to lsb-appchk-python from lsbappchk-python (convention)
 
