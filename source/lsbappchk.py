@@ -122,6 +122,7 @@ def main(argv):
     while line:
         if line[0] != '#':
             lsb_modules.append(line)
+            exclude.append(line)
         line = modfile.readline()
         line = line.rstrip()
     modfile.close()
