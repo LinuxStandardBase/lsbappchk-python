@@ -1,10 +1,12 @@
 # XXX We should play the usual tricks defining stuff here and building
 # XXX a specfile from this info, but not yet: for now keep in sync
 PACKAGE=lsb-appchk-python
-VERSION=3.2.0
+VERSION=3.90.0
 RELEASE=1
 
-#
+# for getting the module list from the lsb db
+DBOPTS=-N -h $$LSBDBHOST -u $$LSBUSER --password=$$LSBDBPASSWD
+
 # Derive date string for daily snapshots
 ISO_DATE=$(shell date +"%Y%m%d")
 PWD=$(shell pwd)
@@ -16,6 +18,7 @@ RPM_SOURCE_NAME=$(FULL_PACKAGE_NAME)-$(RELEASE).src.rpm
 
 SOURCE1 = $(PACKAGE)-$(VERSION).tar.gz
 TETJ = tetj.py
+MODULE_LIST = lsb-python-modules.list
 
 # Temporary build directory
 TMP_BUILD_DIR=/tmp/$(FULL_PACKAGE_NAME)
@@ -65,6 +68,9 @@ endif
 
 clean:
 	@rm -f *.rpm *.deb *.tar.gz tetj.py
+
+gensrc:
+	mysql $(DBOPTS) $$LSBDB < get_python_modules.sql > $(MODULE_LIST)
 
 tarball: $(SOURCE1) $(TETJ)
 

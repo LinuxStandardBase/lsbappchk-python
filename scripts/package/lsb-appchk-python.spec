@@ -8,6 +8,7 @@ License: Artistic
 Group: Development/Tools
 Source: %{name}-%{version}.tar.gz
 Source1: tetj.py
+Source2: lsb-python-modules.list
 URL: http://www.linuxbase.org/test
 #Prefix: %{_prefix}
 BuildRoot: %{_tmppath}/%{name}-root
@@ -37,7 +38,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 mkdir -p ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 cp -p source/lsbappchk.py ${RPM_BUILD_ROOT}%{basedir}/bin
 cp -p %{SOURCE1} ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
-cp -p lists/lsb-python-modules.list ${RPM_BUILD_ROOT}%{basedir}/share/appchk
+cp -p %{SOURCE2} ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 
 # VERSION file for the journal
 cat > VERSION.lsbappchk.py << EOF
@@ -69,6 +70,9 @@ fi
 
 #==================================================
 %changelog
+* Mon Feb 18 2008 Stew Benedict <stewb@linux-foundation.org>
+- We generate lsb-python-modules.list from the specdb now
+
 * Mon Dec 03 2007 Stew Benedict <stewb@linux-foundation.org>
 - Add license file
 
