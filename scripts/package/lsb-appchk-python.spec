@@ -37,6 +37,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{basedir}/bin
 mkdir -p ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 mkdir -p ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 cp -p source/lsbappchk.py ${RPM_BUILD_ROOT}%{basedir}/bin
+cp -p source/lsb_modulefinder.py ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 cp -p %{SOURCE1} ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 cp -p %{SOURCE2} ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 
@@ -70,6 +71,9 @@ fi
 
 #==================================================
 %changelog
+* Tue Apr 15 2008 Stew Benedict <stewb@linux-foundation.org>
+- package/use lsb_modulefinder based on modulefinder (bug 1881)
+
 * Mon Feb 18 2008 Stew Benedict <stewb@linux-foundation.org>
 - We generate lsb-python-modules.list from the specdb now
 

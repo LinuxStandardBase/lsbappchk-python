@@ -8,12 +8,12 @@ import sys
 import os
 import md5
 # modulefinder does all the heavy lifting
-import modulefinder
 sys.path.append('/opt/lsb/lib/appchk')
+import lsb_modulefinder
 import tetj
 
 # re-define the report class for our needs
-class lsbmf(modulefinder.ModuleFinder):
+class lsbmf(lsb_modulefinder.ModuleFinder):
     def report(self):
         return self.modules 
 
