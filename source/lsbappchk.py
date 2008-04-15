@@ -1,4 +1,4 @@
-#!/opt/lsb/appbat/bin/python
+#!/usr/bin/python
 # prototype application to check python applications
 # for LSB compliance
 # derived from ideas at http://www.tarind.com/depgraph.html
@@ -6,7 +6,7 @@
 
 import sys
 import os
-import md5
+import string
 # modulefinder does all the heavy lifting
 sys.path.append('/opt/lsb/lib/appchk')
 import lsb_modulefinder
@@ -17,23 +17,18 @@ class lsbmf(lsb_modulefinder.ModuleFinder):
     def report(self):
         return self.modules 
 
-def sumfile(fobj):
-    m = md5.new()
-    while True:
-        d = fobj.read(8096)
-        if not d:
-            break
-        m.update(d)
-    return m.hexdigest()
-
+def sumfile(fname):
+    cmd = 'md5sum %s' % (fname)
+    for m in os.popen(cmd).readlines():
+        md5sum = string.split(m)[0]
+    return md5sum
+      
 def file_info(journal, tfile):
     fsize = os.path.getsize(tfile)
     wstr = "FILE_SIZE %d" % (fsize)
     journal.purpose_start('File information')
     journal.testcase_info(1,0,0,wstr)
-    f = file(tfile, 'rb')
-    md5sum = sumfile(f)
-    f.close()
+    md5sum = sumfile(tfile)
     wstr = "BINARY_MD5SUM %s" % (md5sum)
     journal.testcase_info(0,0,0,wstr)
     journal.result(tetj.TETJ_PASS)        

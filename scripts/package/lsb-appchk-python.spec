@@ -14,7 +14,7 @@ URL: http://www.linuxbase.org/test
 BuildRoot: %{_tmppath}/%{name}-root
 AutoReqProv: no
 BuildArch: noarch
-Requires: lsb-tet3-lite lsb-python
+Requires: lsb-tet3-lite
 
 %description
 This is the official package version of the LSB Python Application Test.
@@ -73,6 +73,7 @@ fi
 %changelog
 * Tue Apr 15 2008 Stew Benedict <stewb@linux-foundation.org>
 - package/use lsb_modulefinder based on modulefinder (bug 1881)
+- make lsbappchk.py LSB compliant (drop md5 module, use system python)
 
 * Mon Feb 18 2008 Stew Benedict <stewb@linux-foundation.org>
 - We generate lsb-python-modules.list from the specdb now
