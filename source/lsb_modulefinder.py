@@ -2,12 +2,12 @@
 
 # This module should be kept compatible with Python 2.2, see PEP 291.
 
-import dis
+import sys
+import lsb_dis
 import imp
 import marshal
 import os
-import sys
-import new
+import lsb_types
 
 if hasattr(sys.__stdout__, "newlines"):
     READ_MODE = "U"  # universal line endings
@@ -15,10 +15,10 @@ else:
     # remain compatible with Python  < 2.3
     READ_MODE = "r"
 
-LOAD_CONST = dis.opname.index('LOAD_CONST')
-IMPORT_NAME = dis.opname.index('IMPORT_NAME')
-STORE_NAME = dis.opname.index('STORE_NAME')
-STORE_GLOBAL = dis.opname.index('STORE_GLOBAL')
+LOAD_CONST = lsb_dis.opname.index('LOAD_CONST')
+IMPORT_NAME = lsb_dis.opname.index('IMPORT_NAME')
+STORE_NAME = lsb_dis.opname.index('STORE_NAME')
+STORE_GLOBAL = lsb_dis.opname.index('STORE_GLOBAL')
 STORE_OPS = [STORE_NAME, STORE_GLOBAL]
 
 # Modulefinder does a good job at simulating Python's, but it can not
@@ -326,7 +326,7 @@ class ModuleFinder:
             c = code[i]
             i = i+1
             op = ord(c)
-            if op >= dis.HAVE_ARGUMENT:
+            if op >= lsb_dis.HAVE_ARGUMENT:
                 oparg = ord(code[i]) + ord(code[i+1])*256
                 i = i+2
             if op == LOAD_CONST:
@@ -527,62 +527,11 @@ class ModuleFinder:
             if isinstance(consts[i], type(co)):
                 consts[i] = self.replace_paths_in_code(consts[i])
 
-        return new.code(co.co_argcount, co.co_nlocals, co.co_stacksize,
+        return lsb_types.code(co.co_argcount, co.co_nlocals, co.co_stacksize,
                          co.co_flags, co.co_code, tuple(consts), co.co_names,
                          co.co_varnames, new_filename, co.co_name,
                          co.co_firstlineno, co.co_lnotab,
                          co.co_freevars, co.co_cellvars)
-
-
-def test():
-    # Parse command line
-    import getopt
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "dmp:qx:")
-    except getopt.error, msg:
-        print msg
-        return
-
-    # Process options
-    debug = 1
-    domods = 0
-    addpath = []
-    exclude = []
-    for o, a in opts:
-        if o == '-d':
-            debug = debug + 1
-        if o == '-m':
-            domods = 1
-        if o == '-p':
-            addpath = addpath + a.split(os.pathsep)
-        if o == '-q':
-            debug = 0
-        if o == '-x':
-            exclude.append(a)
-
-    # Provide default arguments
-    if not args:
-        script = "hello.py"
-    else:
-        script = args[0]
-
-    # Set the path based on sys.path and the script directory
-    path = sys.path[:]
-    path[0] = os.path.dirname(script)
-    path = addpath + path
-    if debug > 1:
-        print "path:"
-        for item in path:
-            print "   ", repr(item)
-
-    # Create the module finder and turn its crank
-    mf = ModuleFinder(path, debug, exclude)
-    for arg in args[1:]:
-        mf.load_file(arg)
-    mf.run_script(script)
-    mf.report()
-    return mf  # for -i debugging
-
 
 if __name__ == '__main__':
     try:

@@ -20,6 +20,10 @@ Requires: lsb-tet3-lite
 This is the official package version of the LSB Python Application Test.
 Heavy lifting is done by Python's modulefinder module, using some ideas
 from http://www.tarind.com/depgraph.html.
+
+This package bundles a modified version of modulfinder named lsb_modulefinder,
+as well as a modified dis.py and copies of opcode.py and types.py from Python
+2.4.
  
 #==================================================
 %prep
@@ -38,6 +42,9 @@ mkdir -p ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 mkdir -p ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 cp -p source/lsbappchk.py ${RPM_BUILD_ROOT}%{basedir}/bin
 cp -p source/lsb_modulefinder.py ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
+for module in modulefinder dis opcode types; do
+  cp -p source/lsb_$module.py ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
+done
 cp -p %{SOURCE1} ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 cp -p %{SOURCE2} ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 
@@ -47,9 +54,11 @@ cat > VERSION.lsbappchk.py << EOF
 EOF
 cp VERSION.lsbappchk.py ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 
-# license file
+# license files
 install -d ${RPM_BUILD_ROOT}%{basedir}/doc/%{name}
-cp source/Artistic ${RPM_BUILD_ROOT}%{basedir}/doc/%{name}
+for license in Artistic LICENSE.txt; do
+  cp source/$license ${RPM_BUILD_ROOT}%{basedir}/doc/%{name}
+done
 
 #==================================================
 %clean
@@ -74,6 +83,10 @@ fi
 * Tue Apr 15 2008 Stew Benedict <stewb@linux-foundation.org>
 - package/use lsb_modulefinder based on modulefinder (bug 1881)
 - make lsbappchk.py LSB compliant (drop md5 module, use system python)
+- make lsb_modulefinder LSB compliant:
+  replace "new" with "types", drop getopt dependency
+  bundle modified lsb_opcode, lsb_types, lsb_dis
+- include Python LICENSE.txt for our borrowed modules
 
 * Mon Feb 18 2008 Stew Benedict <stewb@linux-foundation.org>
 - We generate lsb-python-modules.list from the specdb now
