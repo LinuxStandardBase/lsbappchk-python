@@ -74,8 +74,9 @@ def check_modules(journal, modules, lsb_modules, syspath_org):
             journal.purpose_end()
         
 def main(argv):
+    lsb_version = '4.0'
     if len(argv) == 1:
-        print 'Usage: ' + argv[0] + ' [-j] some_program.py'
+        print 'Usage: ' + argv[0] + ' [-j] [-v N.N (LSB version to test for, default is ' + lsb_version + ')] some_program.py'
         sys.exit(1)
 
     # drop our path to the tet module and preserve a pristine sys.path
@@ -88,6 +89,8 @@ def main(argv):
         journal = 1
         testapp = argv[2]
         jsuffix = os.path.basename(testapp)
+    elif '-v' in argv:
+        lsb_version = argv[3]
     else:
         testapp = argv[1]
 

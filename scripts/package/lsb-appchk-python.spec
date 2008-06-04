@@ -28,6 +28,8 @@ as well as a modified dis.py and copies of opcode.py and types.py from Python
 #==================================================
 %prep
 %setup -q
+# (sb) set the default version we'll test against (from the Makefile)
+sed -i "s|lsb_version = '4.0'|lsb_version = '%{lsbversion}'|g" source/lsbappchk.py
 
 #==================================================
 %build
@@ -80,6 +82,9 @@ fi
 
 #==================================================
 %changelog
+* Wed Jun 04 2008 Stew Benedict <stewb@linux-foundation.org>
+- add multiversion support (bug 2098)
+
 * Tue Apr 15 2008 Stew Benedict <stewb@linux-foundation.org>
 - package/use lsb_modulefinder based on modulefinder (bug 1881)
 - make lsbappchk.py LSB compliant (drop md5 module, use system python)
