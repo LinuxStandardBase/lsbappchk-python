@@ -40,14 +40,13 @@ sed -i "s|lsb_version = '4.0'|lsb_version = '%{lsbversion}'|g" source/lsbappchk.
 
 rm -rf ${RPM_BUILD_ROOT}
 mkdir -p ${RPM_BUILD_ROOT}%{basedir}/bin
-mkdir -p ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
 mkdir -p ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 cp -p source/lsbappchk.py ${RPM_BUILD_ROOT}%{basedir}/bin
-cp -p source/lsb_modulefinder.py ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
+cp -p source/lsb_modulefinder.py ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 for module in modulefinder dis opcode types; do
-  cp -p source/lsb_$module.py ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
+  cp -p source/lsb_$module.py ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 done
-cp -p %{SOURCE1} ${RPM_BUILD_ROOT}%{basedir}/lib/appchk
+cp -p %{SOURCE1} ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 cp -p %{SOURCE2} ${RPM_BUILD_ROOT}%{basedir}/share/appchk
 
 # VERSION file for the journal
@@ -73,8 +72,6 @@ fi
 %defattr(-,root,root)
 
 /opt/lsb/bin/lsbappchk.py
-%dir /opt/lsb/lib/appchk
-/opt/lsb/lib/appchk/*
 %dir /opt/lsb/share/appchk
 /opt/lsb/share/appchk/*
 %dir /opt/lsb/doc/%{name}
@@ -82,6 +79,9 @@ fi
 
 #==================================================
 %changelog
+* Wed Jul 02 2008 Stew Benedict <stewb@linux-foundation.org>
+- Lose /opt/lsb/lib to co-exist with multiversion sdk
+
 * Wed Jun 04 2008 Stew Benedict <stewb@linux-foundation.org>
 - add multiversion support (bug 2098)
 

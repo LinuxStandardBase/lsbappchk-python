@@ -8,7 +8,7 @@ import sys
 import os
 import string
 # modulefinder does all the heavy lifting
-sys.path.append('/opt/lsb/lib/appchk')
+sys.path.append('/opt/lsb/share/appchk')
 import lsb_modulefinder
 import tetj
 
