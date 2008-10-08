@@ -96,7 +96,7 @@ def check_modules(journal, modules, lsb_modules, syspath_org, lsb_version):
 def main(argv):
     lsb_version = '4.0'
     if len(argv) == 1:
-        print 'Usage: ' + argv[0] + ' [-j] [-v N.N (LSB version to test for, default is ' + lsb_version + ')] some_program.py'
+        print 'Usage: ' + argv[0] + ' [-j] [-v N.N (LSB version to test for, default is ' + lsb_version + ')] some_program.py [program2.py ...]'
         sys.exit(1)
 
     # drop our path to the tet module and preserve a pristine sys.path
@@ -104,11 +104,17 @@ def main(argv):
 
     sharepath = '/opt/lsb/share/appchk'
 
+    # where the target program names begin?
+    # Let's consider all arguments after options as program names
+    prog_ndx_start=1;
     journal = 0
     if '-j' in argv:
         journal = 1
+        prog_ndx_start = string.index(argv, "-j") + 1
     if '-v' in argv:
         vloc = string.index(argv, "-v")
+        if prog_ndx_start < vloc:
+            prog_ndx_start = vloc + 2;
         lsb_version = argv[vloc + 1]
         try:
             float(lsb_version)
@@ -119,23 +125,7 @@ def main(argv):
             print 'Invalid LSB_VERSION: ' + lsb_version
             sys.exit(1)
 
-    testapp = argv[len(argv)-1]
-    jsuffix = os.path.basename(testapp)
     fullargs = string.join(argv, ' ')
-
-    try:
-        f = file(testapp, 'r')
-    except:
-        print 'Failed to open ' + testapp
-        sys.exit(1)
-    f.close
-
-    # prep the journal header
-    if journal:
-        myname = os.path.basename(argv[0])
-        journal = tetj.Journal('journal.' + myname + '.' + jsuffix, fullargs)
-        journal.add_config("VSX_NAME=lsb-tetjtest.py 0.1 (%s)" % journal.machine)
-        journal.config_end()
 
     path = sys.path[:]
     debug = 0
@@ -156,25 +146,44 @@ def main(argv):
     modfile.close()
     #print lsb_modules
 
-    mf = lsbmf(path,debug,exclude)
+    for prog_ndx in range(prog_ndx_start, len(argv)):
+        mf = lsbmf(path,debug,exclude)
+        testapp = argv[prog_ndx]
+        jsuffix = os.path.basename(testapp)
 
-    # see if target is really a python script and run it
-    try:
-        mf.run_script(testapp)
-    except:
-        print 'Cannot analyse ' + testapp + ' (is it a python app?)'
-        sys.exit(1)
+        # prep the journal header
+        if journal:
+            myname = os.path.basename(argv[0])
+            journal = tetj.Journal('journal.' + myname + '.' + jsuffix, fullargs)
+            journal.add_config("VSX_NAME=lsb-tetjtest.py 0.1 (%s)" % journal.machine)
+            journal.config_end()
 
-    print testapp + " tested against LSB " + lsb_version + ":"
-    if journal:
-        journal.testcase_start(testapp)
-        file_info(journal, testapp)
+        # see if we can access the file
+        try:
+            f = file(testapp, 'r')
+        except:
+            print 'Failed to open ' + testapp
+            sys.exit(1)
+        f.close
 
-    modules = mf.report()
-    check_modules(journal, modules, lsb_modules, syspath_org, lsb_version)
-    if journal:
-        journal.testcase_end(testapp)
-        journal.close()
+        # see if target is really a python script and run it
+        try:
+            mf.run_script(testapp)
+        except:
+            # Maybe it would be enough to print warning here, like in appchk-perl?
+            print 'Cannot analyse ' + testapp + ' (is it a python app?)'
+            sys.exit(1)
+
+        print testapp + " tested against LSB " + lsb_version + ":"
+        if journal:
+            journal.testcase_start(testapp)
+            file_info(journal, testapp)
+
+        modules = mf.report()
+        check_modules(journal, modules, lsb_modules, syspath_org, lsb_version)
+        if journal:
+            journal.testcase_end(testapp)
+            journal.close()
 
 if __name__=='__main__':
     main(sys.argv)
