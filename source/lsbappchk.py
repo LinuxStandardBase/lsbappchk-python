@@ -11,6 +11,7 @@ import string
 sys.path.append('/opt/lsb/share/appchk')
 import lsb_modulefinder
 import tetj
+version = '0.3'
 
 # re-define the report class for our needs
 class lsbmf(lsb_modulefinder.ModuleFinder):
@@ -36,7 +37,7 @@ def file_info(journal, tfile):
 
 # compare the found modules to the LSB list and report
 # if the import uses a /opt path, just warn
-def check_modules(journal, modules, lsb_modules, syspath_org, lsb_version):
+def check_modules(journal, modules, lsb_modules, syspath_org, lsb_version, appdir, lanana, modpath):
     twarn = ' is used from nonstandard path '
     tfail = ' is used, but is not part of LSB'
     tappeared = ' did not appear until LSB '
@@ -79,9 +80,34 @@ def check_modules(journal, modules, lsb_modules, syspath_org, lsb_version):
                 else:
                     # no __file__ attribute - just give it one to move on
                     mdir = syspath_org[0]
-                if mdir not in syspath_org:
-                    tresult = key + twarn + mdir
-                    jresult = tetj.TETJ_UNRESOLVED
+                # see if the module is in `pwd`, lanana, or modpath
+                if mdir == appdir:
+                    tresult = key + twarn + mdir + " (in working directory)"
+                    jresult = tetj.TETJ_PASS
+                elif mdir not in syspath_org:
+                    path_found = 0
+                    if lanana != '':
+                        lanana_path = '/opt/' + lanana
+                        if not os.path.exists(lanana_path):
+                            print lanana_path + ' does not exist...'
+                            sys.exit(1)                    
+                        if lanana_path in mdir:
+                            tresult = key + twarn + mdir + " (path passed with -L)"
+                            jresult = tetj.TETJ_PASS
+                            path_found = 1
+                    if modpath != '':
+                        modpaths = string.split(modpath, ',')
+                        for path in modpaths:
+                            if not os.path.exists(path):
+                                print path + ' does not exist...'
+                                sys.exit(1)                    
+                            if path in mdir:
+                                tresult = key + twarn + mdir + " (path passed with -m)"
+                                jresult = tetj.TETJ_PASS
+                                path_found = 1
+                    if path_found == 0:
+                            tresult = key + twarn + mdir
+                            jresult = tetj.TETJ_UNRESOLVED
                 else:
                     tresult = key + tfail
                     jresult = tetj.TETJ_FAIL
@@ -95,8 +121,15 @@ def check_modules(journal, modules, lsb_modules, syspath_org, lsb_version):
         
 def main(argv):
     lsb_version = '4.0'
-    if len(argv) == 1:
-        print 'Usage: ' + argv[0] + ' [-j] [-v N.N (LSB version to test for, default is ' + lsb_version + ')] some_program.py [program2.py ...]'
+    if len(argv) == 1 or '-?' in argv or '-h' in argv:
+        print argv[0] + ' version ' + version 
+        print 'Usage: ' + argv[0]
+        print '       [-j]'
+        print '       [-v N.N (LSB version to test for, default is ' + lsb_version + ')]'
+        print '       [-L <LANANA name> (will search /opt/LANANA for private modules)]'
+        print '       [-m <additional comma seperated path(s) to search for private modules>]'
+        print '       [-?|-h (this message)]'
+        print '       some_program.py [program2.py ...]'
         sys.exit(1)
 
     # drop our path to the tet module and preserve a pristine sys.path
@@ -106,16 +139,31 @@ def main(argv):
 
     # where the target program names begin?
     # Let's consider all arguments after options as program names
-    prog_ndx_start=1;
+    prog_ndx_start = 1
     journal = 0
+    lanana = ''
+    modpath = ''
     if '-j' in argv:
         journal = 1
         prog_ndx_start = string.index(argv, "-j") + 1
+
+    if '-L' in argv:
+        lloc = string.index(argv, "-L")
+        lanana = argv[lloc + 1]
+        if prog_ndx_start <= lloc:
+            prog_ndx_start = lloc + 2;
+
+    if '-m' in argv:
+        mloc = string.index(argv, "-m")
+        modpath = argv[mloc + 1]
+        if prog_ndx_start <= mloc:
+            prog_ndx_start = mloc + 2;
+
     if '-v' in argv:
         vloc = string.index(argv, "-v")
-        if prog_ndx_start < vloc:
-            prog_ndx_start = vloc + 2;
         lsb_version = argv[vloc + 1]
+        if prog_ndx_start <= vloc:
+            prog_ndx_start = vloc + 2;
         try:
             float(lsb_version)
         except:
@@ -150,12 +198,15 @@ def main(argv):
         mf = lsbmf(path,debug,exclude)
         testapp = argv[prog_ndx]
         jsuffix = os.path.basename(testapp)
-
+        # used to see if we're loading modules from `pwd` (which is allowed)
+        appdir = os.path.dirname(testapp)
+        if appdir == '':
+            appdir = os.environ["PWD"]
         # prep the journal header
         if journal:
             myname = os.path.basename(argv[0])
             journal = tetj.Journal('journal.' + myname + '.' + jsuffix, fullargs)
-            journal.add_config("VSX_NAME=lsb-tetjtest.py 0.1 (%s)" % journal.machine)
+            journal.add_config("VSX_NAME=lsbappchk.py " + version + " (noarch)")
             journal.config_end()
 
         # see if we can access the file
@@ -180,7 +231,7 @@ def main(argv):
             file_info(journal, testapp)
 
         modules = mf.report()
-        check_modules(journal, modules, lsb_modules, syspath_org, lsb_version)
+        check_modules(journal, modules, lsb_modules, syspath_org, lsb_version, appdir, lanana, modpath)
         if journal:
             journal.testcase_end(testapp)
             journal.close()
