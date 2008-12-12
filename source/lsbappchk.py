@@ -8,7 +8,7 @@ import sys
 import os
 import string
 # modulefinder does all the heavy lifting
-sys.path.append('/opt/lsb/share/appchk')
+sys.path.append(sys.path[0] + '/../share/appchk')
 import lsb_modulefinder
 import tetj
 version = '0.3'
@@ -135,7 +135,7 @@ def main(argv):
     # drop our path to the tet module and preserve a pristine sys.path
     syspath_org = sys.path[:-1]
 
-    sharepath = '/opt/lsb/share/appchk'
+    sharepath = sys.path[0] + '/../share/appchk'
 
     # where the target program names begin?
     # Let's consider all arguments after options as program names
