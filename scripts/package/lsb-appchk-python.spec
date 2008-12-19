@@ -61,6 +61,10 @@ for license in Artistic LICENSE.txt; do
   cp source/$license ${RPM_BUILD_ROOT}%{basedir}/doc/%{name}
 done
 
+# man page
+install -d ${RPM_BUILD_ROOT}%{basedir}/man/man1
+cp doc/lsbappchk.py.1 ${RPM_BUILD_ROOT}%{basedir}/man/man1
+
 #==================================================
 %clean
 if [ ! -z "${RPM_BUILD_ROOT}"  -a "${RPM_BUILD_ROOT}" != "/" ]; then 
@@ -76,9 +80,13 @@ fi
 /opt/lsb/share/appchk/*
 %dir /opt/lsb/doc/%{name}
 /opt/lsb/doc/%{name}/*
+/opt/lsb/man/man1/lsbappchk.py.1
 
 #==================================================
 %changelog
+* Fri Dec 19 2008 Stew Benedict <stewb@linux-foundation.org>
+- add manpage
+
 * Wed Jul 02 2008 Stew Benedict <stewb@linux-foundation.org>
 - Lose /opt/lsb/lib to co-exist with multiversion sdk
 
