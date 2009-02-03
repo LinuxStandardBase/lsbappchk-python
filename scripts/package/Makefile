@@ -2,7 +2,7 @@
 # XXX a specfile from this info, but not yet: for now keep in sync
 PACKAGE=lsb-appchk-python
 VERSION=4.0.0
-RELEASE=2
+RELEASE=3
 # default version we will test against - change as needed
 LSB_VERSION=4.0
 
