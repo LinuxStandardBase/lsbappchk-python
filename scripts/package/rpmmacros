@@ -3,7 +3,7 @@
 # Should unpackaged files in a build root terminate a build?
 #
 # 0 for legacy compatibility.
-%_unpackaged_files_terminate_build	0
+%_unpackaged_files_terminate_build	1
 
 # Should missing %doc files in the build directory terminate a build?
 #

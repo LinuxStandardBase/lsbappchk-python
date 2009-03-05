@@ -64,6 +64,10 @@ done
 install -d ${RPM_BUILD_ROOT}%{basedir}/man/man1
 cp doc/lsbappchk.py.1 ${RPM_BUILD_ROOT}%{basedir}/man/man1
 
+# bug 2509 - unpackaged .pyc/.pyo files on some build platforms
+find ${RPM_BUILD_ROOT}%{basedir} -name '*.pyc' | xargs rm -f
+find ${RPM_BUILD_ROOT}%{basedir} -name '*.pyo' | xargs rm -f
+
 #==================================================
 %clean
 if [ ! -z "${RPM_BUILD_ROOT}"  -a "${RPM_BUILD_ROOT}" != "/" ]; then 
