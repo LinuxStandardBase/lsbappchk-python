@@ -1,8 +1,11 @@
+# %{ver}, %{rel} are provided by the Makefile
+%define ver @VERSION@
+%define rel @RELEASE@
 %define basedir /opt/lsb
-# %{version}, %{rel} are provided by the Makefile
+
 Summary: LSB Python Application Checker
 Name: lsb-appchk-python
-Version: %{version}
+Version: %{ver}
 Release: %{rel}
 License: Artistic 
 Group: Development/Tools
