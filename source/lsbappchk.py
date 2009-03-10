@@ -11,7 +11,7 @@ import string
 sys.path.append(sys.path[0] + '/../share/appchk')
 import lsb_modulefinder
 import tetj
-version = '0.3'
+version = '@BUILDVERSION@'
 
 # re-define the report class for our needs
 class lsbmf(lsb_modulefinder.ModuleFinder):

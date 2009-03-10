@@ -1,6 +1,7 @@
-# %{ver}, %{rel} are provided by the Makefile
+# %{ver}, %{rel}, %{lsbversion} are provided by the Makefile
 %define ver @VERSION@
 %define rel @RELEASE@
+%define lsbversion @LSBVERSION@
 %define basedir /opt/lsb
 
 Summary: LSB Python Application Checker
@@ -32,6 +33,8 @@ as well as a modified dis.py and copies of opcode.py and types.py from Python
 %setup -q
 # (sb) set the default version we'll test against (from the Makefile)
 sed -i "s|lsb_version = '4.0'|lsb_version = '%{lsbversion}'|g" source/lsbappchk.py
+# (sb) and the build version in the binary
+sed -i 's|@BUILDVERSION@|%{ver}|g' source/lsbappchk.py
 
 #==================================================
 %build
