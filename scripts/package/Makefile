@@ -2,9 +2,9 @@
 # XXX a specfile from this info, but not yet: for now keep in sync
 PACKAGE=lsb-appchk-python
 VERSION=4.0.0
-RELEASE=5
+RELEASE=6
 # default version we will test against - change as needed
-LSB_VERSION=4.0
+LSBVERSION=4.0
 
 # for getting the module list from the lsb db
 DBOPTS=-N -h $$LSBDBHOST -u $$LSBUSER --password=$$LSBDBPASSWD
