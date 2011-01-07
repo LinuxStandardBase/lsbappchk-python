@@ -42,6 +42,7 @@ def check_modules(journal, modules, lsb_modules, syspath_org, lsb_version, appdi
     tfail = ' is used, but is not part of LSB'
     tappeared = ' did not appear until LSB '
     twithdrawn = ' was withdrawn in LSB '
+    tdeprecated = ' was deprecated in LSB '
     keys = modules.keys()
     keys.sort()
     tcount = 0;
@@ -54,9 +55,17 @@ def check_modules(journal, modules, lsb_modules, syspath_org, lsb_version, appdi
         if key in lsb_modules:
             appeared = lsb_modules[key][0]
             withdrawn = lsb_modules[key][1]
-            #print appeared, withdrawn
+            deprecated = lsb_modules[key][2]
+            #print appeared, withdrawn, deprecated
+            if deprecated != "NULL":
+                if float(deprecated) <= float(lsb_version):
+                    tresult = key + tdeprecated + deprecated
+                    jresult = tetj.TETJ_WARNING             
+                    print tresult
+                    if journal:                
+                        journal.testcase_info(0,0,0,tresult)
             if withdrawn != "NULL":
-                if float(withdrawn) < float(lsb_version):
+                if float(withdrawn) <= float(lsb_version):
                     tresult = key + twithdrawn + withdrawn
                     jresult = tetj.TETJ_FAIL              
                     print tresult
@@ -186,9 +195,9 @@ def main(argv):
     line = line.rstrip()
     while line:
         if line[0] != '#':
-            module, appeared, withdrawn = string.split(line)
+            module, appeared, withdrawn, deprecated = string.split(line)
             exclude.append(module)
-            lsb_modules[module] = appeared, withdrawn
+            lsb_modules[module] = appeared, withdrawn, deprecated
         line = modfile.readline()
         line = line.rstrip()
     modfile.close()

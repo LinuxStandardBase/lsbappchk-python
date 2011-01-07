@@ -93,6 +93,9 @@ fi
 
 #==================================================
 %changelog
+* Fri Jan 07 2011 Stew Benedict <stewb@linux-foundation.org>
+- add support for deprecated modules (don't have any yet, but perl does)
+
 * Tue Feb 03 2009 Stew Benedict <stewb@linux-foundation.org>
 - drop lsb-tet3-lite requires
 
