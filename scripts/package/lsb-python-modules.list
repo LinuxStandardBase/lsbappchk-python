@@ -1,5 +1,5 @@
 array	3.2	NULL	NULL
-audioop	3.2	NULL	NULL
+audioop	3.2	4.0	NULL
 binascii	3.2	NULL	NULL
 bisect	3.2	NULL	NULL
 cPickle	3.2	NULL	NULL
