@@ -1,8 +1,8 @@
 # XXX We should play the usual tricks defining stuff here and building
 # XXX a specfile from this info, but not yet: for now keep in sync
 PACKAGE=lsb-appchk-python
-VERSION=4.1.0
-RELEASE=2
+VERSION=4.1.1
+RELEASE=1
 # default version we will test against - change as needed
 LSBVERSION=4.1
 
