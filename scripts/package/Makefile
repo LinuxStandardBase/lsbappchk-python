@@ -1,10 +1,10 @@
 # XXX We should play the usual tricks defining stuff here and building
 # XXX a specfile from this info, but not yet: for now keep in sync
 PACKAGE=lsb-appchk-python
-VERSION=4.1.1
+VERSION=4.90.0
 RELEASE=1
 # default version we will test against - change as needed
-LSBVERSION=4.1
+LSBVERSION=5.0
 
 # for getting the module list from the lsb db
 DBOPTS=-N -h $$LSBDBHOST -u $$LSBUSER --password=$$LSBDBPASSWD
