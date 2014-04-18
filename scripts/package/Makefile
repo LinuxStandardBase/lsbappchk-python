@@ -2,7 +2,7 @@
 # XXX a specfile from this info, but not yet: for now keep in sync
 PACKAGE=lsb-appchk-python
 VERSION=4.90.0
-RELEASE=1
+BUILDNO=2
 # default version we will test against - change as needed
 LSBVERSION=5.0
 
@@ -29,9 +29,10 @@ TMP_BUILD_DIR=/tmp/$(FULL_PACKAGE_NAME)
 # OFFICIAL_RELEASE should be set to the tag to extract from CVS
 ifdef OFFICIAL_RELEASE
 # EXPORT_TAG should be set to the cvs tag to use
+RELEASE=$(BUILDNO)
 EXPORT_TAG=-r $(OFFICIAL_RELEASE)
 else
-RELEASE=0.$(ISO_DATE)
+RELEASE=0.$(ISO_DATE).$(BUILDNO)
 EXPORT_TAG=-D now
 endif
 
@@ -57,7 +58,7 @@ RPM_BINARY_DIR=$(RPM_TMP_BUILD_DIR)/RPMS/noarch
 RPM_SRPM_DIR=$(RPM_TMP_BUILD_DIR)/SRPMS
 
 # Override this on the command line to use a different repo
-BZRTREES?=http://bzr.freestandards.org/lsb/devel
+BZRTREES?=http://bzr.linuxfoundation.org/lsb/devel
 BZR_MODULE=lsbappchk-python
 TETJ_MODULE=misc-test
 
